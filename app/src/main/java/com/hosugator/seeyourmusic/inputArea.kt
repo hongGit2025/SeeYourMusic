@@ -15,7 +15,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import mySTT
 
 private const val TAG_INPUTAREA = "InputAreaUtils"
 
@@ -38,7 +37,7 @@ fun InputArea(
         Text(text = "See Your Music")
 
         // Compose 추가: STT
-        mySTT()
+        SpeakToText()
 
         // 텍스트 필드: 감지/번역할 텍스트 입력창 생성
         TextField(
