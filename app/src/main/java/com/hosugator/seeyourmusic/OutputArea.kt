@@ -47,6 +47,7 @@ fun OutputArea(
                             translatedText = result
                         }
                         Log.i(TAG_OUTPUTAREA, "텍스트가 번역되었습니다.")
+                        translatedLanguageStatus = "텍스트 번역 완료"
                     } catch (e: Exception) {
                         translatedLanguageStatus = "오류: ${e.message}"
                         Log.e(TAG_OUTPUTAREA, "에러: 텍스트 번역 실패")

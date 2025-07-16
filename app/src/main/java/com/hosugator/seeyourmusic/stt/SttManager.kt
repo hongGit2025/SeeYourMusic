@@ -1,4 +1,4 @@
-//// In com.hosugator.seeyourmusic.stt.SttManager.kt
+//// In com.hosugator.seeyourmusic.stt.MySTT.kt
 //package com.hosugator.seeyourmusic.stt
 //
 //import android.content.Context

@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import mySTT
 
 private const val TAG_INPUTAREA = "InputAreaUtils"
 
@@ -36,10 +37,13 @@ fun InputArea(
     ) {
         Text(text = "See Your Music")
 
+        // Compose 추가: STT
+        mySTT()
+
         // 텍스트 필드: 감지/번역할 텍스트 입력창 생성
         TextField(
             value = inputText,
-            onValueChange = { onTextChange },
+            onValueChange = { onTextChange(it) },
             label = { Text("텍스트 입력") },
         )
         // 버튼: 감지 기능 실행
@@ -48,7 +52,8 @@ fun InputArea(
                 // 코루틴 시작
                 coroutineScope.launch {
                     try {
-                        val result = identifyLanguage(inputText)
+                        var result = identifyLanguage(inputText)
+                        result = getDisplayLanguageName(result)
                         identifiedLanguageResult = "감지된 언어: $result"
                         Log.i(TAG_INPUTAREA, "언어가 감지되었습니다.")
                     } catch (e: Exception) {
