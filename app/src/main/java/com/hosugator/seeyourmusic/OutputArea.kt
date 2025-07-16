@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +27,7 @@ fun OutputArea(
     // 결과를 저장할 변수 생성
     var translatedLanguageStatus by remember { mutableStateOf("텍스트 번역 전") }
     var translatedText by remember { mutableStateOf("") }
+    var targetLanguage by remember { mutableStateOf("KOREAN") }
 
     // 코루틴 관리할 변수 생성
     var coroutineScope = rememberCoroutineScope()
@@ -33,15 +35,22 @@ fun OutputArea(
     Column(
         modifier = Modifier.padding(48.dp)
     ) {
+
+        TextField(
+            value = targetLanguage,
+            onValueChange = { targetLanguage = it },
+            label = { Text(text = "원하는 언어를 영어로 입력하세요.") }
+        )
         // 버튼: 감지 기능 실행
         Button(
             onClick = {
                 // 코루틴 시작
+                val finalTargetLanguage = targetLanguage.substring(0..1)
                 coroutineScope.launch {
                     try {
                         val result = identifyAndTranslateLanguage(
                             inputText,
-                            targetLanguage = TranslateLanguage.KOREAN
+                            targetLanguage = finalTargetLanguage
                         )
                         if (result != null) {
                             translatedText = result
