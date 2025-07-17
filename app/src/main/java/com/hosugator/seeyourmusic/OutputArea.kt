@@ -2,6 +2,7 @@ package com.hosugator.seeyourmusic
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -35,36 +36,39 @@ fun OutputArea(
     Column(
         modifier = Modifier.padding(48.dp)
     ) {
-
-        TextField(
-            value = targetLanguage,
-            onValueChange = { targetLanguage = it },
-            label = { Text(text = "원하는 언어를 영어로 입력하세요.") }
-        )
-        // 버튼: 감지 기능 실행
-        Button(
-            onClick = {
-                // 코루틴 시작
-                val finalTargetLanguage = targetLanguage.substring(0..1)
-                coroutineScope.launch {
-                    try {
-                        val result = identifyAndTranslateLanguage(
-                            inputText,
-                            targetLanguage = finalTargetLanguage
-                        )
-                        if (result != null) {
-                            translatedText = result
+        Row {
+            // 버튼: 감지 기능 실행
+            Button(
+                onClick = {
+                    // 코루틴 시작
+                    val finalTargetLanguage = targetLanguage.substring(0..1).lowercase()
+                    coroutineScope.launch {
+                        try {
+                            translatedLanguageStatus = "번역 중"
+                            val result = identifyAndTranslateLanguage(
+                                inputText,
+                                targetLanguage = finalTargetLanguage
+                            )
+                            if (result != null) {
+                                translatedText = result
+                            }
+                            Log.i(TAG_OUTPUTAREA, "텍스트가 번역되었습니다.")
+                            translatedLanguageStatus = "텍스트 번역 완료"
+                        } catch (e: Exception) {
+                            translatedLanguageStatus = "오류: ${e.message}"
+                            Log.e(TAG_OUTPUTAREA, "에러: 텍스트 번역 실패")
                         }
-                        Log.i(TAG_OUTPUTAREA, "텍스트가 번역되었습니다.")
-                        translatedLanguageStatus = "텍스트 번역 완료"
-                    } catch (e: Exception) {
-                        translatedLanguageStatus = "오류: ${e.message}"
-                        Log.e(TAG_OUTPUTAREA, "에러: 텍스트 번역 실패")
                     }
-                }
-            },
-        ) {
-            Text(text = translatedLanguageStatus)
+                },
+            ) {
+                Text(text = translatedLanguageStatus)
+            }
+
+            TextField(
+                value = targetLanguage,
+                onValueChange = { targetLanguage = it },
+                label = { Text(text = "원하는 언어 입력") }
+            )
         }
         Text(text = translatedText)
     }
